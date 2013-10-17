@@ -201,10 +201,24 @@ try:
                     # Catch exception thrown if number is invalid
                     pass
 
-            elif commandLetter == "y":
+            elif commandLetter == "x":
                 try:
                     commandData = int( command[ 1: ] )
-                    tiltServoPWM.movePulseIncrement( commandData )
+                    panServoPWM.movePulseIncrement( commandData )
+
+                except ValueError:
+                    # Catch exception thrown if number is invalid
+                    pass
+
+            elif commandLetter == "v":
+                try:
+                    commandData = int( command[ 1: ] )
+                    # Intendended to take increments (x,y) to move
+                    # For now, see what moving diagnally is like...
+                    # NB: I'm not near a pi right now so may fail misserably...
+                    for i in range(10):
+                        panServoPWM.movePulseIncrement( 50 )
+                        tiltServoPWM.movePulseIncrement( 50 )
 
                 except ValueError:
                     # Catch exception thrown if number is invalid
