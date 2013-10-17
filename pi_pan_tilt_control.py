@@ -8,7 +8,7 @@ PWM_FREQUENCY = 50    # Hz
 
 PWM_DMA_CHANNEL = 0
 PWM_SUBCYLCLE_TIME_US = 1000/PWM_FREQUENCY * 1000
-PWM_PULSE_INCREMENT_US = 10
+PWM_PULSE_INCREMENT_US = 5
 
 PAN_PWM_PIN = 23
 TILT_PWM_PIN = 24
@@ -217,6 +217,17 @@ try:
                 try:
                     commandData = int( command[ 1: ] )
                     tiltServoPWM.movePulseIncrement( commandData )
+
+                except ValueError:
+                    # Catch exception thrown if number is invalid
+                    pass
+
+            elif commandLetter == "s":
+                try:
+                    #commandData = int( command[ 1: ] )
+                    for i in range(100):
+                        panServoPWM.movePulseIncrement( 5 )
+                        time.sleep( 0.05 )
 
                 except ValueError:
                     # Catch exception thrown if number is invalid
