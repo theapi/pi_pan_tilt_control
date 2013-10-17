@@ -75,8 +75,20 @@ class ServoPWM:
     #---------------------------------------------------------------------------
     def movePulseIncrement( self, pulseIncrement ):
 
-        pulseWidth = self.lastPulseWidthSet + pulseIncrement
-        self.setPulseWidth( pulseWidth )
+        if self.lastPulseWidthSet is None:
+            command = self.midAnglePulseWidthPair[ 1 ] + pulseIncrement
+        else:
+            command = self.lastPulseWidthSet + pulseIncrement
+
+        # Stop it going too far for this servo's settings.
+        if command < self.maxAnglePulseWidthPair[ 1 ]:
+            command = self.maxAnglePulseWidthPair[ 1 ]
+        elif command >self.minAnglePulseWidthPair[ 1 ]:
+            command = self.minAnglePulseWidthPair[ 1 ]
+
+        print command
+
+        self.setPulseWidth( command )
 
     #---------------------------------------------------------------------------
     def setAngle( self, angle ):
@@ -149,12 +161,12 @@ def finishedTiltingBackward( curTiltAngle ):
 # Create ServoPWM instances to control the servos
 panServoPWM = ServoPWM( PAN_PWM_PIN,
     minAnglePulseWidthPair=( 45.0, 1850 ),
-    midAnglePulseWidthPair=( 90.0, 1400 ),
-    maxAnglePulseWidthPair=( 135.0, 1000.0 ) )
-tiltServoPWM = ServoPWM( TILT_PWM_PIN,
-    minAnglePulseWidthPair=( 45.0, 1850 ),
-    midAnglePulseWidthPair=( 90.0, 1500 ),
+    midAnglePulseWidthPair=( 90.0, 1100 ),
     maxAnglePulseWidthPair=( 180.0, 500.0 ) )
+tiltServoPWM = ServoPWM( TILT_PWM_PIN,
+    minAnglePulseWidthPair=( 45.0, 2100 ),
+    midAnglePulseWidthPair=( 90.0, 1700 ),
+    maxAnglePulseWidthPair=( 135.0, 1100.0 ) )
 
 # Setup RPIO, and prepare for PWM signals
 RPIO.setmode( RPIO.BCM )
@@ -214,15 +226,24 @@ try:
                 try:
                     # Take increments (pan,tilt) to move
                     commandData = command[ 1: ]
-                    vector = commandData.slit(',')
+                    print commandData
+                    vector = commandData.split(',')
                     panIncrement = int( vector[0].strip() )
                     tiltIncrement = int( vector[1].strip() )
 
-                    # For now, see what moving diagnally is like...
-                    # NB: I'm not near a pi right now so may fail misserably...
-                    for i in range(10):
-                        panServoPWM.movePulseIncrement( 50 )
-                        tiltServoPWM.movePulseIncrement( 50 )
+                    panServoPWM.movePulseIncrement( panIncrement )
+                    tiltServoPWM.movePulseIncrement( tiltIncrement )
+
+                except ValueError:
+                    # Catch exception thrown if number is invalid
+                    pass
+
+            elif commandLetter == "d":
+                try:
+                    # Demo
+                    panServoPWM.setCommand( 90 )
+                    tiltServoPWM.setCommand( 90 )
+                    time.sleep( 0.1 )
 
                 except ValueError:
                     # Catch exception thrown if number is invalid
