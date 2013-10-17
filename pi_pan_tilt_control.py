@@ -243,7 +243,35 @@ try:
                     # Demo
                     panServoPWM.setCommand( 90 )
                     tiltServoPWM.setCommand( 90 )
-                    time.sleep( 0.1 )
+                    time.sleep( 0.5 )
+
+                    panServoPWM.setCommand( 45 )
+                    tiltServoPWM.setCommand( 45 )
+                    time.sleep( 0.7 )
+
+                    panServoPWM.setCommand( 180 )
+                    tiltServoPWM.setCommand( 135 )
+                    time.sleep( 0.5 )
+
+                    tiltServoPWM.setCommand( 90 )
+                    time.sleep( 0.3 )
+
+                    panServoPWM.setCommand( 45 )
+                    time.sleep( 0.3 )
+
+                    panServoPWM.setCommand( 180 )
+                    time.sleep( 0.3 )
+
+                    panServoPWM.setCommand( 90 )
+                    time.sleep( 0.3 )
+
+                    tiltServoPWM.setCommand( 45 )
+                    time.sleep( 0.4 )
+
+                    tiltServoPWM.setCommand( 135 )
+                    time.sleep( 0.4 )
+
+                    tiltServoPWM.setCommand( 90 )
 
                 except ValueError:
                     # Catch exception thrown if number is invalid
