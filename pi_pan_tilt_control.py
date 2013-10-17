@@ -201,10 +201,10 @@ try:
                     # Catch exception thrown if number is invalid
                     pass
 
-            elif commandLetter == "x":
+            elif commandLetter == "y":
                 try:
                     commandData = int( command[ 1: ] )
-                    panServoPWM.movePulseIncrement( commandData )
+                    tiltServoPWM.movePulseIncrement( commandData )
 
                 except ValueError:
                     # Catch exception thrown if number is invalid
