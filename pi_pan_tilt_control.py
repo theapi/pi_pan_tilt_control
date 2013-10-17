@@ -212,8 +212,12 @@ try:
 
             elif commandLetter == "v":
                 try:
-                    commandData = int( command[ 1: ] )
-                    # Intendended to take increments (x,y) to move
+                    # Take increments (pan,tilt) to move
+                    commandData = command[ 1: ]
+                    vector = commandData.slit(',')
+                    panIncrement = int( vector[0].strip() )
+                    tiltIncrement = int( vector[1].strip() )
+
                     # For now, see what moving diagnally is like...
                     # NB: I'm not near a pi right now so may fail misserably...
                     for i in range(10):
